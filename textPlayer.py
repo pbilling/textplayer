@@ -2,7 +2,8 @@ import os, sys, signal, time, re
 from signal import signal, SIGPIPE, SIG_DFL
 from subprocess import PIPE, Popen
 from threading import Thread
-from Queue import Queue, Empty
+#from Queue import Queue, Empty
+from queue import Queue, Empty
 
 '''
  Currently, for games that require several clicks to get start info, it doesn't scrape everything. Lost.z5 is one. The first couple commands will not produce the expected output.
@@ -25,7 +26,7 @@ class TextPlayer:
 		# Verify that specified game file exists, else limit functionality
 		if game_filename == None or not os.path.exists('textplayer/games/' + game_filename):
 			self.game_loaded_properly = False
-			print "Unrecognized game file or bad path"
+			print("Unrecognized game file or bad path")
 			return
 
 		self.game_filename = game_filename
@@ -37,7 +38,12 @@ class TextPlayer:
 		if self.game_loaded_properly == True:
 
 			# Start the game process with both 'standard in' and 'standard out' pipes
-			self.game_process = Popen(['./textplayer/frotz/dfrotz', 'textplayer/games/' + self.game_filename], stdin=PIPE, stdout=PIPE, bufsize=1)
+			#self.game_process = Popen(['./textplayer/frotz/dfrotz', 'textplayer/games/' + self.game_filename], stdin=PIPE, stdout=PIPE, bufsize=1)
+			self.game_process = Popen(['./textplayer/frotz/dfrotz', 'textplayer/games/' + self.game_filename], 
+				stdin=PIPE,
+				stdout=PIPE,
+				bufsize=1,
+				universal_newlines=True)
 
 			# Create Queue object
 			self.output_queue = Queue()
@@ -76,9 +82,9 @@ class TextPlayer:
 				f.close()
 				if '\n' in commands:
 					for command in commands.split('\n'):
-						print self.execute_command(command)
+						print(self.execute_command(command))
 				else:
-					print self.execute_command(command)
+					print(self.execute_command(command))
 
 	# Send a command to the game and return the output
 	def execute_command(self, command):
