@@ -10,7 +10,7 @@ The only requirement is Frotz, a Z-Machine interpreter written by Stefan Jokisch
 Download this source code, then perform the following commands in the textplayer folder.
 
 ```bash
-$ git clone https://github.com/DavidGriffith/frotz.git
+$ git clone https://gitlab.com/DavidGriffith/frotz.git
 $ cd frotz
 $ make dumb
 ```
